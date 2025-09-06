@@ -6,21 +6,41 @@ A toy to explore simple hub and spoke peer to peer applications built on WebRTC 
 Features
 --------
 
-- Single "host" hosting a "game"
-- Multiple "players" can join the game
+- Web app served as static files only i.e. no server state/database etc.
+- One peer acts as "host" hosting a "game" (this is not required but fits the hub and spoke P2P game use case)
+- Multiple "players" can join the "game", and communicate P2P with the host
 - All web based, only browsers needed
-- All peer-to-peer client based state only, no server state (web app served as static files)
-- WebRTC connection negotiated by a (shared) app agnostic signalling server
+- All peer-to-peer client based state only, no server state
+- WebRTC connection negotiated via temporary WebSocket connection to a signalling server
+
+Notes
+-----
+
+- Signalling is required to set up WebRTC
+- Signalling server is application agnostic, just broadcasts to all peers subscribed to the "game" room
+- The signalling could be via QR codes and scanning if all peers support it
+- To allow for dumb hosts (e.g. TVs) this starter uses a WebSocket signalling approach
+
+Tech stack
+----------
+
+- Vanilla JS modules
+- No build step
+- WebSocket signalling for WebRTC negotiation
+- WebRTC for Host-Player connection
+- Browser motion API for events
+- (for optional QR) `qr-code` library (single WebComponent) loaded via CDN
 
 Communication
 -------------
 
-1. Load page (/index.html)
-2. By default start "Host", give link to "Player" URL (/player.html)
-3. For host: create and display game, provide link to Player to join Game (/player.html?game=ID)
-3. For player: enter game ID to join (if not provided in URL)
-4. Player starts sending "commands" to host
-5. Host continually processes commands, updating and displaying game state
+Two web browsers end up communicating P2P after the following flow:
+
+1. [Host] Load page (/host.html)
+2. [Host] Create and display game, provide link to Player to join Game (/player.html?game=ID)
+3. [Player] Scan QR code navigate to provided URL
+4. [Both] Negotiate a P2P connection using temporary connection to signalling
+5. [Both] Drop the signalling connection and communicate purely P2P
 
 ```mermaid
 sequenceDiagram
@@ -84,19 +104,6 @@ sequenceDiagram
     P-->PH: player event
     PH->>HP: player event
 ```
-
-Tech stack
-----------
-
-- SPA
-- Vanilla JS where possible
-    - Reset UI each state change?
-    - WebRTC for Host-Player connection
-    - WebSocket signalling for WebRTC negotiation
-    - Browser motion API for events
-    - Single `main.js` script loaded as module in HTML
-    - Other `.js` files imported normally, browser will load
-- `qr-code` library (single WebComponent)
 
 Development
 -----------
