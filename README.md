@@ -55,34 +55,34 @@ sequenceDiagram
 
     note over P, H: Both sides know the other's listening, so we negotiate WebRTC session description
     P->>PH: createOffer()
-    PH->>P: <offer>
-    P->>S: <offer>
-    S->>H: <offer>
-    H->>HP: setRemoteDesc(<offer>)
+    PH->>P: offer
+    P->>S: offer
+    S->>H: offer
+    H->>HP: setRemoteDesc(offer)
     H->>HP: createAnswer()
-    HP->>H: <answer>
-    H->>HP: setLocalDesc(<answer>)
-    H->>S: <answer>
-    S->>P: <answer>
-    P->>PH: setRemoteDesc(<answer>)
+    HP->>H: answer
+    H->>HP: setLocalDesc(answer)
+    H->>S: answer
+    S->>P: answer
+    P->>PH: setRemoteDesc(answer)
 
     note over P,H: Session params shared, so now exchange ICE candidates until WebRTC connects
-    HP->>H: <host candidate>
-    H->>S: <host candidate>
-    S->>P: <host candidate>
-    P->>PH: <host candidate>
+    HP->>H: host candidate
+    H->>S: host candidate
+    S->>P: host candidate
+    P->>PH: host candidate
     note over P,H: (or other way)
-    PH->>P: <player candidate>
-    P->>S: <player candidate>
-    S->>H: <player candidate>
-    H->>HP: <player candidate>
+    PH->>P: player candidate
+    P->>S: player candidate
+    S->>H: player candidate
+    H->>HP: player candidate
 
     note over H,P: Once peers are connected, no need for signalling
     deactivate S
-    H-->HP: <host event>
-    HP->>PH: <host event>
-    P-->PH: <player event>
-    PH->>HP: <player event>
+    H-->HP: host event
+    HP->>PH: host event
+    P-->PH: player event
+    PH->>HP: player event
 ```
 
 Tech stack
